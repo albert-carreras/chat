@@ -22,12 +22,15 @@
     "events": "^3.2.0",
     "fbemitter": "^2.1.1",
     "firebase": "^7.18.0",
+    "lodash": "^4.17.20",
     "matrix-js-sdk": "^8.1.0",
+    "moment": "^2.27.0",
     "observable-hooks": "^3.1.0",
     "react": "16.13.1",
     "react-native": "0.63.2",
     "react-native-autogrow-textinput": "^5.4.0",
     "react-native-gesture-handler": "^1.7.0",
+    "react-native-image-picker": "^2.3.3",
     "react-native-reanimated": "^1.13.0",
     "react-native-safe-area-context": "^3.1.4",
     "react-native-screens": "^2.10.1",
@@ -60,7 +63,7 @@
     }
   },
   "lint-staged": {
-    "*.{js,ts,tsx}": [
+    "*.{js,jsx}": [
       "eslint --fix"
     ]
   }
