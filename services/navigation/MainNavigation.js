@@ -16,7 +16,12 @@ const RootStack = createNativeStackNavigator();
 const LoggedOutStack = createNativeStackNavigator();
 
 function MainStackScreen() {
-  return <MainStack.Navigator screenOptions={{ headerShown: false }} />;
+  return (
+    <MainStack.Navigator screenOptions={{ stackPresentation: 'push', headerShown: false }}>
+      <MainStack.Screen name="ChatsList" component={ChatsList} initialParams={{ native: true }} />
+      <MainStack.Screen name="Chat" component={Chat} initialParams={{ native: true }} />
+    </MainStack.Navigator>
+  );
 }
 
 export default function MainNavigation({ loggedIn = false }) {
@@ -33,23 +38,12 @@ export default function MainNavigation({ loggedIn = false }) {
     <SafeAreaProvider>
       <NavigationContainer ref={navigationRef} onReady={handleOnRouteChange} onStateChange={handleOnRouteChange}>
         {!loggedIn ? (
-          <LoggedOutStack.Navigator screenoptions={{ headerShown: false }}>
+          <LoggedOutStack.Navigator screenOptions={{ stackPresentation: 'modal', headerShown: false }}>
             <LoggedOutStack.Screen name="Login" component={Login} initialParams={{ native: true }} />
           </LoggedOutStack.Navigator>
         ) : (
           <RootStack.Navigator screenOptions={{ stackPresentation: 'modal', headerShown: false }}>
-            <MainStack.Screen
-              screenOptions={{ stackPresentation: 'push' }}
-              name="ChatsList"
-              component={ChatsList}
-              initialParams={{ native: true }}
-            />
-            <MainStack.Screen
-              screenOptions={{ stackPresentation: 'push' }}
-              name="Chat"
-              component={Chat}
-              initialParams={{ native: true }}
-            />
+            <RootStack.Screen name="Main" component={MainStackScreen} initialParams={{ native: true }} />
             <RootStack.Screen name="Settings" component={Settings} initialParams={{ native: true }} />
             <RootStack.Screen name="Profile" component={Profile} initialParams={{ native: true }} />
             <RootStack.Screen name="NewChat" component={NewChat} initialParams={{ native: true }} />

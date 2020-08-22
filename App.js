@@ -42,7 +42,7 @@ function App() {
 
   useEffect(() => {
     route$.subscribe((route) => {
-      if (['ChatsList', 'Chat'].includes(route?.name)) {
+      if (['ChatsList', 'Chat', 'Login'].includes(route?.name)) {
         setTopColor(1);
       } else {
         setTopColor(0);
