@@ -1,4 +1,4 @@
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useCallback } from 'react';
 import { Button, Divider, Icon, Layout, Text, TopNavigation, TopNavigationAction } from '@ui-kitten/components';
 
@@ -15,7 +15,14 @@ export default function Settings({ navigation }) {
     navigation.goBack();
   };
 
-  const BackAction = () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />;
+  const BackAction = () => (
+    <TopNavigationAction
+      hitSlop={{ top: 100, left: 20, right: 20, bottom: 100 }}
+      style={{ justifyContent: 'center', height: 40 }}
+      icon={BackIcon}
+      onPress={navigateBack}
+    />
+  );
 
   return (
     <SafeAreaView style={{ flex: 1 }}>

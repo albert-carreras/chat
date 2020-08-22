@@ -1,4 +1,4 @@
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useState } from 'react';
 import { Icon, Layout, TopNavigation, TopNavigationAction, Input, Button, Text } from '@ui-kitten/components';
 import chatService from 'services/chat/chatService';
@@ -38,7 +38,14 @@ export default function NewChat({ navigation }) {
     navigation.goBack();
   };
 
-  const BackAction = () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />;
+  const BackAction = () => (
+    <TopNavigationAction
+      hitSlop={{ top: 100, left: 20, right: 20, bottom: 100 }}
+      style={{ justifyContent: 'center', height: 40 }}
+      icon={BackIcon}
+      onPress={navigateBack}
+    />
+  );
 
   return (
     <SafeAreaView style={{ flex: 1 }}>

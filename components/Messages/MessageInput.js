@@ -2,9 +2,13 @@ import { Icon, useTheme } from '@ui-kitten/components';
 import React, { useState } from 'react';
 import { AutoGrowingTextInput } from 'react-native-autogrow-textinput';
 import { TouchableOpacity, View } from 'react-native';
+import isIos from 'utilities/isIos';
+import { useObservableState } from 'observable-hooks';
+import themeService from 'services/navigation/themeService';
 
 export default function MessageInput({ onType, onSend }) {
   const [messageValue, setMessageValue] = useState('');
+  const isDark = useObservableState(themeService.getIsDark$());
   const theme = useTheme();
 
   const typeMessage = (messageText) => {
@@ -22,14 +26,15 @@ export default function MessageInput({ onType, onSend }) {
     <View style={{ flexDirection: 'row', margin: 10 }}>
       <AutoGrowingTextInput
         placeholder="What to say"
-        placeholderTextColor="rgba(255,255,255,.7)"
+        placeholderTextColor={isDark ? 'rgba(255,255,255,.7)' : 'rgba(0,0,0,.7)'}
         value={messageValue}
         onChangeText={typeMessage}
         style={{
           flex: 1,
           borderRadius: 20,
           paddingHorizontal: 14,
-          paddingTop: 6,
+          paddingTop: isIos() ? 6 : 0,
+          paddingBottom: isIos() ? 6 : 2,
           fontSize: 16,
           letterSpacing: 0.3,
           fontWeight: '400',
@@ -45,7 +50,6 @@ export default function MessageInput({ onType, onSend }) {
           alignItems: 'center',
           marginLeft: 8,
           marginRight: 8,
-          alignSelf: 'flex-end',
         }}
         onPress={handleSend}
       >

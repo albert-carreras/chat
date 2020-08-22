@@ -57,7 +57,6 @@ export default class Chat {
   }
 
   async update(changes) {
-    console.log('eyy');
     return InteractionManager.runAfterInteractions(() => {
       if (changes.direct) {
         const newDirect = this._isDirect();

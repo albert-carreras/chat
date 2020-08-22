@@ -1,5 +1,6 @@
-import { KeyboardAvoidingView, SafeAreaView } from 'react-native';
+import { KeyboardAvoidingView, Platform } from 'react-native';
 import React, { useEffect, useState } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Divider, Icon, Layout, Text, TopNavigation, TopNavigationAction } from '@ui-kitten/components';
 import ImagePicker from 'react-native-image-picker';
 
@@ -9,8 +10,9 @@ import chatService from 'services/chat/chatService';
 import { useObservableState } from 'observable-hooks';
 
 const ProfileIcon = (props) => <Icon {...props} name="person-outline" />;
-
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
+
+const isIos = Platform.OS === 'ios';
 
 export default function Chat({ route, navigation }) {
   const [chat, setChat] = useState(chatService.getChatById(route.params.roomId));
@@ -55,9 +57,23 @@ export default function Chat({ route, navigation }) {
     navigation.navigate('Profile', { title: route?.params?.title });
   };
 
-  const BackAction = () => <TopNavigationAction icon={BackIcon} onPress={navigateBack} />;
+  const BackAction = () => (
+    <TopNavigationAction
+      hitSlop={{ top: 100, left: 20, right: 20, bottom: 100 }}
+      style={{ justifyContent: 'center', height: 40 }}
+      icon={BackIcon}
+      onPress={navigateBack}
+    />
+  );
 
-  const ProfileAction = () => <TopNavigationAction icon={ProfileIcon} onPress={navigateProfile} />;
+  const ProfileAction = () => (
+    <TopNavigationAction
+      hitSlop={{ top: 100, left: 20, right: 20, bottom: 100 }}
+      style={{ justifyContent: 'center', height: 40 }}
+      icon={ProfileIcon}
+      onPress={navigateProfile}
+    />
+  );
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Layout style={{ flex: 1 }}>
@@ -78,7 +94,7 @@ export default function Chat({ route, navigation }) {
             backgroundColor: '#bbb',
           }}
         />
-        <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" keyboardVerticalOffset={50}>
+        <KeyboardAvoidingView style={{ flex: 1 }} behavior={isIos ? 'padding' : 'null'} keyboardVerticalOffset={50}>
           <Timeline chat={chat} />
           <MessageInput onSend={onSend} onType={onType} />
         </KeyboardAvoidingView>

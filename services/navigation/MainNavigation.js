@@ -1,8 +1,8 @@
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import React, { useCallback, useRef } from 'react';
 import { getActiveRoute, route$ } from 'services/navigation/navigationService';
+import { createNativeStackNavigator } from 'react-native-screens/native-stack';
 
 import ChatsList from 'screens/ChatsList/ChatsList';
 import Chat from 'screens/Chat/Chat';
@@ -11,20 +11,15 @@ import Profile from 'screens/Profile/Profile';
 import NewChat from 'screens/NewChat/NewChat';
 import Login from 'screens/Login/Login';
 
-const MainStack = createStackNavigator();
-const RootStack = createStackNavigator();
-const LoggedOutStack = createStackNavigator();
+const MainStack = createNativeStackNavigator();
+const RootStack = createNativeStackNavigator();
+const LoggedOutStack = createNativeStackNavigator();
 
 function MainStackScreen() {
-  return (
-    <MainStack.Navigator screenOptions={{ cardOverlayEnabled: false }} headerMode="none">
-      <MainStack.Screen name="ChatsList" component={ChatsList} />
-      <MainStack.Screen name="Chat" component={Chat} />
-    </MainStack.Navigator>
-  );
+  return <MainStack.Navigator screenOptions={{ headerShown: false }} />;
 }
 
-export default function MainNavigation({ navigation, route, loggedIn = false }) {
+export default function MainNavigation({ loggedIn = false }) {
   const navigationRef = useRef();
   const handleOnRouteChange = useCallback((state) => {
     if (!state) {
@@ -38,39 +33,26 @@ export default function MainNavigation({ navigation, route, loggedIn = false }) 
     <SafeAreaProvider>
       <NavigationContainer ref={navigationRef} onReady={handleOnRouteChange} onStateChange={handleOnRouteChange}>
         {!loggedIn ? (
-          <LoggedOutStack.Navigator headerMode="none">
-            <LoggedOutStack.Screen name="Login" component={Login} />
+          <LoggedOutStack.Navigator screenoptions={{ headerShown: false }}>
+            <LoggedOutStack.Screen name="Login" component={Login} initialParams={{ native: true }} />
           </LoggedOutStack.Navigator>
         ) : (
-          <RootStack.Navigator headerMode="none">
-            <RootStack.Screen name="Main" component={MainStackScreen} />
-            <RootStack.Screen
-              name="Settings"
-              component={Settings}
-              options={{
-                gestureEnabled: true,
-                cardOverlayEnabled: true,
-                ...TransitionPresets.ModalPresentationIOS,
-              }}
+          <RootStack.Navigator screenOptions={{ stackPresentation: 'modal', headerShown: false }}>
+            <MainStack.Screen
+              screenOptions={{ stackPresentation: 'push' }}
+              name="ChatsList"
+              component={ChatsList}
+              initialParams={{ native: true }}
             />
-            <RootStack.Screen
-              name="Profile"
-              component={Profile}
-              options={{
-                gestureEnabled: true,
-                cardOverlayEnabled: true,
-                ...TransitionPresets.ModalPresentationIOS,
-              }}
+            <MainStack.Screen
+              screenOptions={{ stackPresentation: 'push' }}
+              name="Chat"
+              component={Chat}
+              initialParams={{ native: true }}
             />
-            <RootStack.Screen
-              name="NewChat"
-              component={NewChat}
-              options={{
-                gestureEnabled: true,
-                cardOverlayEnabled: true,
-                ...TransitionPresets.ModalPresentationIOS,
-              }}
-            />
+            <RootStack.Screen name="Settings" component={Settings} initialParams={{ native: true }} />
+            <RootStack.Screen name="Profile" component={Profile} initialParams={{ native: true }} />
+            <RootStack.Screen name="NewChat" component={NewChat} initialParams={{ native: true }} />
           </RootStack.Navigator>
         )}
       </NavigationContainer>

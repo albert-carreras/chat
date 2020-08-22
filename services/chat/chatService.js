@@ -228,7 +228,6 @@ class ChatService {
   }
 
   _isChatDisplayed(chat) {
-    console.log(321, this._opened);
     if (this._opened === 'all') return true;
     if (this._opened === chat) return true;
     return false;

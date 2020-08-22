@@ -1,4 +1,4 @@
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useCallback } from 'react';
 import { List, Divider, Icon, Layout, TopNavigation, TopNavigationAction, Text } from '@ui-kitten/components';
 import chatService from 'services/chat/chatService';
@@ -30,8 +30,18 @@ export default function ChatsList({ navigation }) {
   const RightAction = useCallback(
     () => (
       <>
-        <TopNavigationAction icon={NewChatIcon} onPress={navigateNewChat} />
-        <TopNavigationAction icon={SettingsIcon} onPress={navigateSettings} />
+        <TopNavigationAction
+          hitSlop={{ top: 100, left: 20, right: 20, bottom: 100 }}
+          style={{ justifyContent: 'center', height: 40 }}
+          icon={NewChatIcon}
+          onPress={navigateNewChat}
+        />
+        <TopNavigationAction
+          hitSlop={{ top: 100, left: 12, right: 20, bottom: 100 }}
+          style={{ marginLeft: 12, justifyContent: 'center', height: 40 }}
+          icon={SettingsIcon}
+          onPress={navigateSettings}
+        />
       </>
     ),
     [navigateNewChat, navigateSettings],

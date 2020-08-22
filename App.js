@@ -1,7 +1,10 @@
 import 'react-native-gesture-handler';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useObservableState } from 'observable-hooks';
-import { Appearance, Dimensions, Image, StatusBar } from 'react-native';
+import { LogBox, Dimensions, Image, StatusBar } from 'react-native';
+import { enableScreens } from 'react-native-screens';
+
+enableScreens();
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -19,27 +22,25 @@ import authService from 'services/auth/authService';
 import synapseService from 'services/auth/synapseService';
 import MainNavigation from 'services/navigation/MainNavigation';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import navigationService, { route$ } from './services/navigation/navigationService';
+import { route$ } from './services/navigation/navigationService';
+import themeService from './services/navigation/themeService';
 
 const colorsDark = ['#1A2138', '#222B45'];
 const colorsLight = ['#F7F9FC', '#FFFFFF'];
+
+LogBox.ignoreLogs(['Setting a timer']);
 
 function App() {
   const authLoaded = useObservableState(authService.isLoaded$());
   const data = useObservableState(authService.getData$());
   const matrixReady = useObservableState(synapseService.isReady$());
-  const [colorScheme, setColorScheme] = useState(Appearance.getColorScheme());
-  const isDark = useRef(colorScheme === 'dark');
+  const isDark = useObservableState(themeService.getIsDark$());
   const [bottomColor, setBottomColor] = useState(1);
   const [topColor, setTopColor] = useState(0);
-
+  console.log(isDark);
   const isLoggedIn = data?.userId && data?.accessToken;
 
   useEffect(() => {
-    const listener = ({ colorScheme }) => {
-      setColorScheme(colorScheme);
-    };
-    Appearance.addChangeListener(listener);
     route$.subscribe((route) => {
       if (['ChatsList', 'Chat'].includes(route?.name)) {
         setTopColor(1);
@@ -53,9 +54,8 @@ function App() {
         setBottomColor(1);
       }
     });
-    return () => {
-      Appearance.removeChangeListener(listener);
-    };
+
+    themeService.destroy();
   }, []);
   if (!authLoaded || (isLoggedIn && !matrixReady)) {
     return <Splash />;
@@ -63,17 +63,16 @@ function App() {
 
   return (
     <>
-      <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
-      <SafeAreaView
-        style={{ flex: 0, backgroundColor: isDark.current ? colorsDark[topColor] : colorsLight[topColor] }}
+      <StatusBar
+        barStyle={isDark ? 'light-content' : 'dark-content'}
+        backgroundColor={isDark ? colorsDark[topColor] : colorsLight[topColor]}
       />
-      <SafeAreaView
-        style={{ flex: 1, backgroundColor: isDark.current ? colorsDark[bottomColor] : colorsLight[bottomColor] }}
-      >
+      <SafeAreaView style={{ flex: 0, backgroundColor: isDark ? colorsDark[topColor] : colorsLight[topColor] }} />
+      <SafeAreaView style={{ flex: 1, backgroundColor: isDark ? colorsDark[bottomColor] : colorsLight[bottomColor] }}>
         <ApplicationProvider
           {...eva}
           customMapping={mapping}
-          theme={isDark.current ? { ...eva.dark, ...darkTheme } : { ...eva.light, ...lightTheme }}
+          theme={isDark ? { ...eva.dark, ...darkTheme } : { ...eva.light, ...lightTheme }}
         >
           <IconRegistry icons={EvaIconsPack} />
           <MainNavigation loggedIn={isLoggedIn} />
