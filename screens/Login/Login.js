@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { KeyboardAvoidingView, SafeAreaView, View } from 'react-native';
 import { Input, Layout, Button, Text, Spinner } from '@ui-kitten/components';
 import authService from 'services/auth/authService';
+import ios from 'utilities/isIos';
+const isIos = ios();
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -32,7 +34,7 @@ export default function Login() {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior={isIos ? 'padding' : 'null'} keyboardVerticalOffset={50}>
         <Layout style={{ flex: 1, paddingHorizontal: 30, justifyContent: 'center' }}>
           <Text category="h4" style={{ textAlign: 'center', marginBottom: 30 }}>
             Chat.
@@ -43,7 +45,6 @@ export default function Login() {
             onSubmitEditing={() => passwordInput.current.focus()}
             autoCapitalize="none"
             placeholder="Username"
-            value={username}
             onChangeText={setUsername}
           />
           <Input
@@ -51,7 +52,6 @@ export default function Login() {
             returnKeyType="go"
             ref={passwordInput}
             placeholder="Password"
-            value={password}
             onChangeText={setPassword}
             secureTextEntry
             style={{ marginTop: 3 }}

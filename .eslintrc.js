@@ -5,4 +5,7 @@ module.exports = {
     '@react-native-community',
     'plugin:prettier/recommended',
   ],
+  rules: {
+    "react-native/no-inline-styles": 0
+  }
 };

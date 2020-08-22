@@ -1,4 +1,4 @@
-import { isEqual } from 'lodash';
+import isEqual from 'lodash.isequal';
 import { EventTimeline } from 'matrix-js-sdk';
 import { InteractionManager } from 'react-native';
 import { BehaviorSubject } from 'rxjs';

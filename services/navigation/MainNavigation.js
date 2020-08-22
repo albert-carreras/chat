@@ -1,6 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import React, { useCallback, useRef } from 'react';
+import { View } from 'react-native';
 import { getActiveRoute, route$ } from 'services/navigation/navigationService';
 import { createNativeStackNavigator } from 'react-native-screens/native-stack';
 
@@ -10,17 +11,26 @@ import Settings from 'screens/Settings/Settings';
 import Profile from 'screens/Profile/Profile';
 import NewChat from 'screens/NewChat/NewChat';
 import Login from 'screens/Login/Login';
+import { useTheme } from '@ui-kitten/components';
 
 const MainStack = createNativeStackNavigator();
 const RootStack = createNativeStackNavigator();
 const LoggedOutStack = createNativeStackNavigator();
 
 function MainStackScreen() {
+  const theme = useTheme();
   return (
-    <MainStack.Navigator screenOptions={{ stackPresentation: 'push', headerShown: false }}>
-      <MainStack.Screen name="ChatsList" component={ChatsList} initialParams={{ native: true }} />
-      <MainStack.Screen name="Chat" component={Chat} initialParams={{ native: true }} />
-    </MainStack.Navigator>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: theme['background-basic-color-1'],
+      }}
+    >
+      <MainStack.Navigator screenOptions={{ headerShown: false }}>
+        <MainStack.Screen name="ChatsList" component={ChatsList} initialParams={{ native: true }} />
+        <MainStack.Screen name="Chat" component={Chat} initialParams={{ native: true }} />
+      </MainStack.Navigator>
+    </View>
   );
 }
 

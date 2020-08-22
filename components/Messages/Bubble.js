@@ -1,4 +1,4 @@
-import { Icon, Spinner, useTheme } from '@ui-kitten/components';
+import { Icon, Spinner } from '@ui-kitten/components';
 import React from 'react';
 import { View } from 'react-native';
 
@@ -27,10 +27,8 @@ export default function Bubble({ children, isMe, status }) {
 }
 
 const StatusIcon = ({ status }) => {
-  const theme = useTheme();
-
   if (status === MessageStatus.NOT_SENT || status === MessageStatus.NOT_UPLOADED) {
-    return <Icon name="alert-triangle" width={22} height={22} fill={theme['text-danger-color']} />;
+    return <Icon name="alert-triangle" />;
   } else if (status) {
     return <Spinner size="small" />;
   } else {

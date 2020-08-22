@@ -1,4 +1,4 @@
-import { isEqual } from 'lodash';
+import isEqual from 'lodash.isequal';
 import { EventStatus } from 'matrix-js-sdk';
 import { BehaviorSubject } from 'rxjs';
 

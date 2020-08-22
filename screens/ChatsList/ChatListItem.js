@@ -5,7 +5,14 @@ import React from 'react';
 import { View } from 'react-native';
 
 const AvatarIcon = (props) => {
-  return <Avatar source={{ uri: props.avatarUrl }} defaultSource={require('../../assets/jeje.png')} />;
+  console.log(props.avatarUrl ? { uri: props.avatarUrl } : null);
+  return (
+    <Avatar
+      size="large"
+      source={props.avatarUrl ? { uri: props.avatarUrl } : require('../../assets/jeje.png')}
+      style={{ backgroundColor: '#ddd' }}
+    />
+  );
 };
 
 const AccessoryRight = (props) => (
@@ -19,7 +26,7 @@ const AccessoryRight = (props) => (
           marginLeft: 15,
           height: 20,
           width: 20,
-          backgroundColor: '#ccc',
+          backgroundColor: '#ddd',
           borderRadius: 50,
         }}
       />

@@ -10,7 +10,6 @@ export default function Timeline({ chat }) {
   const [isLoading, setIsLoading] = useState(false);
   const isFocused = useIsFocused();
   const messageList = useObservableState(chat.messages$);
-  const typing = useObservableState(chat.typing$);
   const atStart = useObservableState(chat.atStart$);
   const [timeline, setTimeline] = useState(messageList);
 
@@ -34,18 +33,14 @@ export default function Timeline({ chat }) {
   }, []);
 
   useEffect(() => {
-    // Send read receipt when chat is opened or there's new messages
     if (appState === 'active' && isFocused) chat.sendReadReceipt();
   }, [appState, chat, isFocused, messageList]);
 
   useEffect(() => {
-    // We put loading and typing indicator into the Timeline to have better
-    // visual effects when we swipe to top or bottom
     const tempTimeline = messageList ? [...messageList] : [];
     if (isLoading) tempTimeline.push('loading');
-    if (typing?.length > 0) tempTimeline.unshift('typing');
     setTimeline(tempTimeline);
-  }, [isLoading, messageList, typing]);
+  }, [isLoading, messageList]);
 
   return (
     <FlatList

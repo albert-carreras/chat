@@ -1,11 +1,12 @@
 import { useTheme } from '@ui-kitten/components';
 import { useObservableState } from 'observable-hooks';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Text } from '@ui-kitten/components';
 import Bubble from './Bubble';
 import users from 'services/chat/userService';
 import { View } from 'react-native';
 import themeService from 'services/navigation/themeService';
+import moment from 'moment';
 
 export default function TextMessage({ message, prevSame, nextSame }) {
   const theme = useTheme();
@@ -46,6 +47,8 @@ export default function TextMessage({ message, prevSame, nextSame }) {
     return theme['text-basic-color'];
   };
 
+  const getTimestamp = useCallback(() => moment(message.timestamp).format('HH:mm'), []);
+
   return (
     <Bubble isMe={isMe} status={status}>
       <View
@@ -66,7 +69,12 @@ export default function TextMessage({ message, prevSame, nextSame }) {
           { ...getBorderRadius() },
         ]}
       >
-        <Text style={{ color: getTextColor() }}>{content?.text}</Text>
+        <View style={{ flex: 1 }}>
+          <Text style={{ color: getTextColor() }}>{content?.text}</Text>
+          <Text category="label" style={isMe ? { alignSelf: 'flex-end' } : { alignSelf: 'flex-start' }}>
+            {getTimestamp()}
+          </Text>
+        </View>
       </View>
     </Bubble>
   );

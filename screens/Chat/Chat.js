@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, Platform } from 'react-native';
+import { KeyboardAvoidingView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Divider, Icon, Layout, Text, TopNavigation, TopNavigationAction } from '@ui-kitten/components';
@@ -8,11 +8,11 @@ import MessageInput from 'components/Messages/MessageInput';
 import Timeline from './Timeline';
 import chatService from 'services/chat/chatService';
 import { useObservableState } from 'observable-hooks';
+import ios from 'utilities/isIos';
+const isIos = ios();
 
 const ProfileIcon = (props) => <Icon {...props} name="person-outline" />;
 const BackIcon = (props) => <Icon {...props} name="arrow-back" />;
-
-const isIos = Platform.OS === 'ios';
 
 export default function Chat({ route, navigation }) {
   const [chat, setChat] = useState(chatService.getChatById(route.params.roomId));
